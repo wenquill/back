@@ -1,0 +1,6 @@
+.*
+
+!.gitignore
+!.prettierrc.json
+
+node_modules
