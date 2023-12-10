@@ -1,1 +1,7 @@
+### 200
+
 GET http://localhost:5000/tasks/2 HTTP/1.1
+
+## 404
+
+GET http://localhost:5000/tasks/746 HTTP/1.1

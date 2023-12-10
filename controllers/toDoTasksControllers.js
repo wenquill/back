@@ -1,4 +1,5 @@
 const { v4: uuid } = require('uuid');
+const createHttpError = require('http-errors');
 
 const tasks = [
   {
@@ -33,41 +34,43 @@ module.exports.createTask = (req, res) => {
     ...body,
     id: uuid(),
   };
-  tasks.push(newTask);
 
+  tasks.push(newTask);
   res.status(201).send(tasks);
 };
 
-module.exports.getTask = (req, res) => {
+module.exports.getTask = (req, res, next) => {
   const { taskId } = req.params;
 
   const task = tasks.find(t => t.id === taskId);
   if (!task) {
-    return res.status(404).send('Error 404: Task Not Found');
+    return next(createHttpError(404, 'Error 404: Task Not Found'));
   }
+
   res.status(200).send(task);
 };
 
-module.exports.updateTask = (req, res) => {
+module.exports.updateTask = (req, res, next) => {
   const { body } = req;
   const { taskId } = req.params;
 
   const foundedTaskId = tasks.findIndex(t => t.id === taskId);
   if (foundedTaskId === -1) {
-    return res.status(404).send('Error 404: Task Not Found');
+    return next(createHttpError(404, 'Error 404: Task Not Found'));
   }
-  tasks[foundedTaskId] = { ...tasks[foundedTaskId], ...body };
 
+  tasks[foundedTaskId] = { ...tasks[foundedTaskId], ...body };
   res.status(200).send(tasks[foundedTaskId]);
 };
 
-module.exports.deleteTask = (req, res) => {
+module.exports.deleteTask = (req, res, next) => {
   const { taskId } = req.params;
 
   const foundedTaskId = tasks.findIndex(t => t.id === taskId);
   if (foundedTaskId === -1) {
-    return res.status(404).send('Error 404: Task Not Found');
+    return next(createHttpError(404, 'Error 404: Task Not Found'));
   }
+
   tasks.splice(foundedTaskId, 1);
   res.status(204).send(tasks);
 };
