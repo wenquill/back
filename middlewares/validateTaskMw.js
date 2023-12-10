@@ -1,11 +1,14 @@
-const { TODO_VALIDATION_SCHEMA } = require('../utils/validationSchemas');
+const {
+  TODO_VALIDATION_CREATE_SCHEMA,
+  TODO_VALIDATION_UPDATE_SCHEMA,
+} = require('../utils/validationSchemas');
 
-module.exports.validateTask = async (req, res, next) => {
+module.exports.validateCreateTask = async (req, res, next) => {
   const { body } = req;
   let validatedTask = null;
 
   try {
-    validatedTask = await TODO_VALIDATION_SCHEMA.validate(body);
+    validatedTask = await TODO_VALIDATION_CREATE_SCHEMA.validate(body);
   } catch (err) {
     next(err);
   }
@@ -13,3 +16,18 @@ module.exports.validateTask = async (req, res, next) => {
   req.body = validatedTask;
   next();
 };
+
+module.exports.validateUpdateTask = async (req, res, next) => {
+  const { body } = req;
+  let validatedTask = null;
+
+  try {
+    validatedTask = await TODO_VALIDATION_UPDATE_SCHEMA.validate(body);
+  } catch (err) {
+    next(err);
+  }
+
+  req.body = validatedTask;
+  next();
+};
+

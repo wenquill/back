@@ -1,6 +1,6 @@
 const { ValidationError } = require('yup');
 
-module.exports.validationErrorHandler = (err, res, req, next) => {
+module.exports.validationErrorHandler = (err, req, res, next) => {
   if (err instanceof ValidationError) {
     return res.status(422).send(err.errors[0]);
   }
